@@ -22,9 +22,9 @@ import torch.nn.functional as F
 
 from configs.config import get_device_dtype_sm
 from infer.hubert import (
-    HUBERT_MODEL_PATH,
     extract_hubert_features,
     hubert_audio_requires_normalization,
+    hubert_model_path,
     load_hubert_model,
 )
 from i18n.i18n import I18nAuto
@@ -53,7 +53,7 @@ def printt(strr):
     f.flush()
 
 
-model_path = str(HUBERT_MODEL_PATH)
+model_path = str(hubert_model_path())
 wavPath = "%s/1_16k_wavs" % exp_dir
 outPath = (
     "%s/3_feature256" % exp_dir if version == "v1" else "%s/3_feature768" % exp_dir
