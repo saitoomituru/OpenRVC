@@ -1,11 +1,13 @@
 > [!IMPORTANT]
-> **このforkは、Windows専用だったRVC realtime系をIntel Macの学習・推論からmacOS Audio Unitまで登攀させた実験実装です。**
+> **このrepositoryは、RVC WebUIを祖先に持つfork独自の次世代声変換エンジンです。alpha段階の手元検証と実用は完了し、beta移行のためにコミュニティ支援を募集しています。**
 >
-> GarageBand標準offline Bounceで、実モデルによる単独vocalとオケ付きmixの変換を完走しました。AU内へPython/PyTorchを抱えず、WebUIがruntimeを所有し、AUは薄いaudio headとして接続します。
+> Windows専用だったRVC realtime系を、Intel Macの学習・推論からmacOS Audio Unit、WebUI所有runtime、Bonjour制作LANまで再設計しました。GarageBand標準offline Bounceで、実モデルによる単独vocalとオケ付きmixの変換を実用水準で完走しています。
 >
-> 開発正本: [Issue #1 — RVC realtimeをmacOS Audio Unitへ移植しWebUI runtimeへ統合する](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/1)
+> **beta移行に必要なもの: コード、物資(検証機材)、資金(電気代・投げ銭)、ミュージシャン・音楽スタジオ。** → [コミュニティ支援の募集](#beta移行のためにコミュニティ支援が必要です)
+>
+> 開発正本: [Issue #1](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/1) / 上流との関係: [upstream追従の終了](#上流との関係-upstream追従の終了)
 
-# macOS / Audio Unit登攀版
+# RVC次世代エンジン fork — macOS / Audio Unit登攀版
 
 ![GarageBandでRVCRealtime AUを標準offline Bounce中](assets/fusamofu-img/AUv2inside.png)
 
@@ -79,17 +81,77 @@ GarageBandのsandbox内からPythonをspawnする旧案は廃止しました。r
 - **複数client:** 初期実装はlocal制作環境を対象とし、1 runtimeへ複数AU/Web clientが接続した場合の排他、公平性、資源予約は保証しません。SaaS化する場合はclient session管理とsession単位のworker orchestrationが別途必要です。
 - **model/data:** `.pth`、`.index`、学習素材、生成audioはrepositoryへ同梱しない
 
-## Windows・複数Macの検証資源を募集
+## 次世代エンジンとしての段階
 
-Windows VSTの既存sourceとadapter境界は保っていますが、現在の開発者環境にはWindows実機、複数Mac、CUDA機がありません。したがって、この大規模変更後のWindows VST実機互換、別Mac間Bonjour接続、LAN latency/dropは**未検証**です。未検証を互換保証とは書きません。
+上流RVC WebUIからの差分は、移植修正の範囲を超えたmajor version相当の再設計です。
 
-Windowsまたは複数Macを持つ方は、build結果、DAW、audio device、sample rate、block size、model backend、drop/latencyを添えたIssueまたはPull Requestを歓迎します。「Windowsは大丈夫か」への現在の正確な回答は、資源未提供につきUNKNOWNです。検証可能な人が物資とreceiptを持ち込んでください。
+| 層 | 上流 | このfork |
+| --- | --- | --- |
+| ML stack | Windows・CUDA中心 | architectureから見直し、Intel Mac / Python 3.12でCPU前処理・特徴抽出・学習・推論を完走。CPU学習の完走モデルは3本（receiptは`experiments/`） |
+| DAW plug-in | Windows VST2/VST3 | 既存VST境界を保ったままAudio Unit v2を追加。`auval`、GarageBand挿入、設定slot保存・復元まで確認 |
+| runtime server | plug-inごとのworker | WebUIがPython/RVC processを所有し、AUは薄いaudio head。RSVC stream protocol、bounded restart、SIGKILL/SIGTERM fault injection合格 |
+| network | なし | Bonjourによる広告・探索・明示選択、local gateway。Jam Session型の制作LAN runtimeへ拡張可能な構造 |
+| 実用性 | — | GarageBand標準offline BounceでSolo/オケ付きMixを実用合格 |
 
-上流へは、platform adapter、macOS AU、WebUI所有runtime、RSVC protocol、CPU/CUDAなしengine、検証資料をreview可能な単位へ分けて提案します。キャラクター固有モデルやlocal pathは含めません。
+### alpha: 完了
+
+- 開発者の手元実機（Intel Mac / macOS 15 / GarageBand）で、学習からDAW Bounceまでを一つの経路として通した
+- 実際の歌唱制作に使える水準を、人間の耳によるHuman Gateで確認した
+- 失敗・blocked・未試験・Recoveryを`experiments/`へ残した
+
+### beta: これから
+
+betaは新機能の追加ではなく、手元で通った経路を他人の機材とスタジオへ届ける段階です。
+
+- 一発installer（Python環境、依存、AU/VSTの配置、初回model取得）
+- 互換性整備: Windows VST実機回帰、Apple Silicon、Logic Pro、CUDA機
+- 別Mac間Bonjour、Wi-Fi断、LAN latency/drop
+- realtime monitoring（Intel CPUでは未達。高火力backendまたは最適化、[Issue #35](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/35)）
+- 複数clientの排他・公平性
+
+これらは設計で詰まっているのではなく、検証機材と電力で詰まっています。現在の開発機は12年運用のIntel機1台で、Windows実機、複数Mac、Apple Silicon、CUDA機がありません。「Windowsは大丈夫か」への現在の正確な回答は、資源未提供につきUNKNOWNです。未検証を互換保証とは書きません。
+
+## beta移行のためにコミュニティ支援が必要です
+
+alphaは開発者一人の手元資源で閉じました。betaは一人では閉じません。次の4つを募集します。
+
+| 必要なもの | 具体例 |
+| --- | --- |
+| **コード** | installer、Windows回帰、Apple Silicon backend、CoreML/ONNX、test、docs。Issue / Pull Request歓迎 |
+| **物資** | Apple Silicon Mac、Windows + NVIDIA機、audio interface、検証用の貸出・中古提供 |
+| **資金** | 開発機の電気代、機材費への投げ銭。回収を急がないimpact投資・Patient Capitalの相談 |
+| **ミュージシャン・スタジオ** | 実際の制作現場でのbeta試用、DAW・機材構成ごとのreceipt、他スタジオへの展開 |
+
+実機報告には、OS、CPU/GPU、DAW、audio device、sample rate、block size、model backend、drop/latency、Bounce結果を添えてください。成功だけでなく失敗も等しく価値のあるreceiptです。
+
+支援・投資・スタジオ展開の考え方は、開発者のnoteにまとめています。
+
+- 技術解説: [GarageBandを生かしたまま、AIランナーだけを3回殺した話](https://note.com/fusamofu326/n/n1a29ca1ef393)
+- 支援・投資の考え方: [元ベンチャー社長、現職NEETの、私が求める雇用主（正確にはPatient Capital / Impact Patron像）を説明する](https://note.com/fusamofu326/n/neb54d4397dc5)
+- 連絡: [Issue](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues) / [YouTube @fusamofu](https://youtube.com/@fusamofu)
+
+## 上流との関係: upstream追従の終了
+
+このforkは上流RVC-Projectへの提出を前提とした開発stagingとして始まりましたが、次の観測事実により、upstreamへ差分を戻す開発方針を終了し、fork独自の次世代エンジンとして進化させます。
+
+- 上流repositoryはPull Request機能が無効（`has_pull_requests: false`）で、提出用分岐`upstream/macos-au-webui-runtime`をPRとして提出できなかった
+- そのため実装済み提案を[上流Issue #2854](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/issues/2854)として提出したが、反応がない
+- 上流側にIntel Mac、macOS/AU、DAW実機で統合検証する経路が見えず、これ以上upstreamへ寄せる技術的な利益がない
+- こちらの検証が閉じない原因は設計ではなく検証機材と電力であり、これは上流ではなく独自の資金・支援で解決する
+
+方針:
+
+- 上流の著作権表示、MIT License、来歴は保持する（[LICENSE](LICENSE)、[RVCRealtime/THIRD_PARTY_NOTICES.md](RVCRealtime/THIRD_PARTY_NOTICES.md)）
+- 上流はrevisionを固定した参照元として扱い、必要な修正だけを出典付きで取り込む
+- 上流がPull Requestを再開し取込方法を示した場合、汎用差分の提供は拒まない
+- 記名・知財境界は[Issue #39](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/39)の非攻性防壁を維持する。これは上流への攻撃ではない
+- repository名称の変更とGitHub fork networkからの切り離しは、検証機材と電力を調達した後に行う
+
+判断記録: [experiments/20260926-upstream-independence-decision.ja.md](experiments/20260926-upstream-independence-decision.ja.md)
 
 ---
 
-以下は上流RVC WebUIのREADMEです。
+以下は祖先である上流RVC WebUIのREADMEです（来歴として保持）。
 
 <div align="center">
 
