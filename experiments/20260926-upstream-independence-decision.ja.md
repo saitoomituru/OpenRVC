@@ -17,8 +17,8 @@ upstream へ差分を戻す前提の開発方針を終了し、このforkをRVC 
 - `experiments/20260905-upstream-attribution-boundary-freeze.ja.md`
 - `experiments/20260905-upstream-pr-readiness-audit.ja.md`
 - 上流への実装提案 Issue #2854
-- 開発者note「GarageBandを生かしたまま、AIランナーだけを3回殺した話」（2026-09-05）
-- 開発者note「元ベンチャー社長、現職NEETの、私が求める雇用主（正確にはPatient Capital / Impact Patron像）を説明する」（2026-09-25）
+- 開発者note「GarageBandを生かしたまま、AIランナーだけを3回殺した話」（2026-09-05） https://note.com/fusamofu326/n/n1a29ca1ef393
+- 開発者note「元ベンチャー社長、現職NEETの、私が求める雇用主（正確にはPatient Capital / Impact Patron像）を説明する」（2026-09-25）  https://note.com/fusamofu326/n/neb54d4397dc5
 
 ## 実行コマンド
 

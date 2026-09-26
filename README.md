@@ -127,7 +127,7 @@ alphaは開発者一人の手元資源で閉じました。betaは一人では�
 支援・投資・スタジオ展開の考え方は、開発者のnoteにまとめています。
 
 - 技術解説: [GarageBandを生かしたまま、AIランナーだけを3回殺した話](https://note.com/fusamofu326/n/n1a29ca1ef393)
-- 支援・投資の考え方: [元ベンチャー社長、現職NEETの、私が求める雇用主（正確にはPatient Capital / Impact Patron像）を説明する](https://note.com/fusamofu326)
+- 支援・投資の考え方: [元ベンチャー社長、現職NEETの、私が求める雇用主（正確にはPatient Capital / Impact Patron像）を説明する](https://note.com/fusamofu326/n/neb54d4397dc5)
 - 連絡: [Issue](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues) / [YouTube @fusamofu](https://youtube.com/@fusamofu)
 
 ## 上流との関係: upstream追従の終了
