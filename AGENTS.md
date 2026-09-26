@@ -1,14 +1,16 @@
 # AGENTS.md — macOS / Audio Unit 移植作業規約
 
-この文書は、この fork で人間と coding agent が `RVCRealtime` の macOS / Audio Unit 対応を進めるための局所正本です。
-上流 RVC の一般仕様を置き換えません。
+この文書は、この fork で人間と coding agent が `RVCRealtime` の macOS / Audio Unit 対応と、fork 独自の次世代声変換エンジンへの進化を進めるための局所正本です。
+2026-09-26 以降、この fork は upstream へ差分を戻す開発 staging ではなく、RVC WebUI を祖先に持つ独立した次世代エンジンとして扱います（判断記録: `experiments/20260926-upstream-independence-decision.ja.md`）。
 
 ## 目的
 
 - 既存 `RVCRealtime` の Windows 実装を壊さず macOS へ移植する
 - iPlug2 の Audio Unit 対応を成立させ、Logic Pro / GarageBand で検証する
-- 汎用化できる差分は upstream PR へ戻せる形に保つ
-- キャラクター固有モデル、学習データ、作品都合を上流汎用コードへ混ぜない
+- alpha で通した経路を、installer と互換性整備により beta へ移行する
+- 上流は revision を固定した参照元として扱い、取り込む修正は出典・commit・license を記録する
+- 上流の著作権表示、MIT License、来歴を削除しない
+- キャラクター固有モデル、学習データ、作品都合をエンジン汎用コードへ混ぜない
 
 ## 必読順序
 
@@ -29,7 +31,7 @@
 - NVIDIA / CUDA を macOS 側の暗黙前提にしない。CPU、ONNX、利用可能な backend を実測で分ける
 - Audio thread へ blocking I/O、Python 待ち、network、重い allocator を持ち込まない
 - WebUI 起動だけを VC 成功と判定しない。実音声の end-to-end 変換を別検証する
-- upstream へ戻す変更と、この fork 固有の実験を混ぜない
+- エンジン汎用コードと、キャラクター・作品固有の実験を混ぜない
 - 未実装、未試験、推測を実装済みと書かない
 - 失敗は消さず、再現条件と Recovery を `experiments/` へ残す
 
@@ -93,7 +95,7 @@ platform 固有差分:
 機械検証:
 実機検証:
 生成した experiment log:
-upstream へ戻せる差分:
+上流由来の取込 / 出典:
 unknown / blocked:
 次に触る Issue:
 ```
