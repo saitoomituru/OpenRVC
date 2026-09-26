@@ -47,6 +47,7 @@ upstream へ差分を戻す前提の開発方針を終了し、このforkをRVC 
 - 上流の著作権表示・MIT License・来歴は保持する。#39の非攻性防壁は維持する
 - 上流がPRを再開し取込方法を示した場合、汎用差分の提供は拒まない
 - repository名称変更とGitHub fork networkからの切り離しは、検証機材と電力の調達後に行う
+- 追記: 同日、開発者判断により名称変更を前倒しし、repository名を`OpenRVC`へ変更した。GitHub fork networkからの切り離しは引き続き機材・電力調達後
 
 ## Recovery / 次の一手
 

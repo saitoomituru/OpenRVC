@@ -1,13 +1,13 @@
 > [!IMPORTANT]
-> **このrepositoryは、RVC WebUIを祖先に持つfork独自の次世代声変換エンジンです。alpha段階の手元検証と実用は完了し、beta移行のためにコミュニティ支援を募集しています。**
+> **OpenRVC（Open Realtime Voice Conversion）は、RVC WebUIを祖先に持つfork独自の次世代声変換エンジンです。alpha段階の手元検証と実用は完了し、beta移行のためにコミュニティ支援を募集しています。**
 >
 > Windows専用だったRVC realtime系を、Intel Macの学習・推論からmacOS Audio Unit、WebUI所有runtime、Bonjour制作LANまで再設計しました。GarageBand標準offline Bounceで、実モデルによる単独vocalとオケ付きmixの変換を実用水準で完走しています。
 >
 > **beta移行に必要なもの: コード、物資(検証機材)、資金(電気代・投げ銭)、ミュージシャン・音楽スタジオ。** → [コミュニティ支援の募集](#beta移行のためにコミュニティ支援が必要です)
 >
-> 開発正本: [Issue #1](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/1) / 上流との関係: [upstream追従の終了](#上流との関係-upstream追従の終了)
+> 開発正本: [Issue #1](https://github.com/saitoomituru/OpenRVC/issues/1) / 上流との関係: [upstream追従の終了](#上流との関係-upstream追従の終了)
 
-# RVC次世代エンジン fork — macOS / Audio Unit登攀版
+# OpenRVC — RVC互換・DAWネイティブ次世代声変換エンジン
 
 ![GarageBandでRVCRealtime AUを標準offline Bounce中](assets/fusamofu-img/AUv2inside.png)
 
@@ -76,7 +76,7 @@ GarageBandのsandbox内からPythonをspawnする旧案は廃止しました。r
 ## 現在の製品境界
 
 - **offline Bounce:** Intel Mac実機で実用合格。Soloとオケ付きMixを聴感確認済み
-- **realtime monitoring:** 現在のIntel CPUでは性能未達。[Issue #35](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/35)で最適化または高火力remote backendを追跡
+- **realtime monitoring:** 現在のIntel CPUでは性能未達。[Issue #35](https://github.com/saitoomituru/OpenRVC/issues/35)で最適化または高火力remote backendを追跡
 - **Bonjour:** WebUI/controller所有の発見・明示選択を実装し、単一Macの自己発見、UI Human Gate、GarageBand AUからself backendの実変換とoffline Bounceまで合格。別Mac実測は外部実機で再開するペインステータス凍結
 - **複数client:** 初期実装はlocal制作環境を対象とし、1 runtimeへ複数AU/Web clientが接続した場合の排他、公平性、資源予約は保証しません。SaaS化する場合はclient session管理とsession単位のworker orchestrationが別途必要です。
 - **model/data:** `.pth`、`.index`、学習素材、生成audioはrepositoryへ同梱しない
@@ -106,7 +106,7 @@ betaは新機能の追加ではなく、手元で通った経路を他人の機�
 - 一発installer（Python環境、依存、AU/VSTの配置、初回model取得）
 - 互換性整備: Windows VST実機回帰、Apple Silicon、Logic Pro、CUDA機
 - 別Mac間Bonjour、Wi-Fi断、LAN latency/drop
-- realtime monitoring（Intel CPUでは未達。高火力backendまたは最適化、[Issue #35](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/35)）
+- realtime monitoring（Intel CPUでは未達。高火力backendまたは最適化、[Issue #35](https://github.com/saitoomituru/OpenRVC/issues/35)）
 - 複数clientの排他・公平性
 
 これらは設計で詰まっているのではなく、検証機材と電力で詰まっています。現在の開発機は12年運用のIntel機1台で、Windows実機、複数Mac、Apple Silicon、CUDA機がありません。「Windowsは大丈夫か」への現在の正確な回答は、資源未提供につきUNKNOWNです。未検証を互換保証とは書きません。
@@ -128,7 +128,7 @@ alphaは開発者一人の手元資源で閉じました。betaは一人では�
 
 - 技術解説: [GarageBandを生かしたまま、AIランナーだけを3回殺した話](https://note.com/fusamofu326/n/n1a29ca1ef393)
 - 支援・投資の考え方: [元ベンチャー社長、現職NEETの、私が求める雇用主（正確にはPatient Capital / Impact Patron像）を説明する](https://note.com/fusamofu326/n/neb54d4397dc5)
-- 連絡: [Issue](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues) / [YouTube @fusamofu](https://youtube.com/@fusamofu)
+- 連絡: [Issue](https://github.com/saitoomituru/OpenRVC/issues) / [YouTube @fusamofu](https://youtube.com/@fusamofu)
 
 ## 上流との関係: upstream追従の終了
 
@@ -144,8 +144,9 @@ alphaは開発者一人の手元資源で閉じました。betaは一人では�
 - 上流の著作権表示、MIT License、来歴は保持する（[LICENSE](LICENSE)、[RVCRealtime/THIRD_PARTY_NOTICES.md](RVCRealtime/THIRD_PARTY_NOTICES.md)）
 - 上流はrevisionを固定した参照元として扱い、必要な修正だけを出典付きで取り込む
 - 上流がPull Requestを再開し取込方法を示した場合、汎用差分の提供は拒まない
-- 記名・知財境界は[Issue #39](https://github.com/saitoomituru/Retrieval-based-Voice-Conversion-WebUI/issues/39)の非攻性防壁を維持する。これは上流への攻撃ではない
-- repository名称の変更とGitHub fork networkからの切り離しは、検証機材と電力を調達した後に行う
+- 記名・知財境界は[Issue #39](https://github.com/saitoomituru/OpenRVC/issues/39)の非攻性防壁を維持する。これは上流への攻撃ではない
+- repository名は2026-09-26に`Retrieval-based-Voice-Conversion-WebUI`から`OpenRVC`へ変更した。旧URLはGitHubの転送で引き続き到達できる
+- GitHub fork networkからの切り離しは、検証機材と電力を調達した後に行う
 
 判断記録: [experiments/20260926-upstream-independence-decision.ja.md](experiments/20260926-upstream-independence-decision.ja.md)
 
